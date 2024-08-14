@@ -6,6 +6,29 @@ Linear search implementation
 from typing import List, Any
 
 def linear_search(items: List[Any], key: Any) -> int:
+    """
+
+    Linear search implementation.
+
+    Parameters
+    ----------
+
+    items : List[Any]
+
+        List of items to search
+
+    key : Any
+
+        Item to search for
+
+    Returns
+    -------
+
+    int
+
+        Index of key in list of items, or -1 if it is not present
+
+    """
     result = -1
     #
     # YOUR CODE GOES HERE
@@ -51,3 +74,5 @@ key = 2
 expected = -1
 result = linear_search(items, key)
 assert result == expected, f"Wrong answer for items={items}, key={key}"
+
+print("All tests passed!")
