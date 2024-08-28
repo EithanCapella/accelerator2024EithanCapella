@@ -52,11 +52,32 @@ def detect_indent(line):
 
 def parse_code(code):
     """ Parsing function """
-    ans = None
+    #ans = None
     #
-    # YOUR CODE GOES HERE
+    # Idea first split the text by the spaces with split_lines
+    # Then create a new empty node as our root.
+    #for each line in this list of splitLines we can detect the indent level and assign a new Node to that point 
     #
-    return ans
+    linesList = split_lines(code) #Create a list of all words saving the indent
+    rootNode = Node(None) #Create an empty initial Node
+    stack = [(0,rootNode)] #We will use a tuple to store the indent level and its node.
+    
+    
+    for line in linesList:
+        newNode = Node(line.strip())
+        indentLevel = detect_indent(line)
+        
+        #stack[-1] gives tge last item or most recently added node
+        #Idea: currentLine is a child of the node of the stack, we exit when we found a parent node for the current line.
+        while (stack and stack[-1][0] >= indentLevel): #Check that the current lines level is less or equal to the indent of the last Node in the stack.
+            stack.pop() #Pop the nodes to find the correct parent node with a lower indent level
+            
+        stack[-1][1].children.append(newNode)
+        
+        stack.append((indentLevel, newNode)) #New node pushed unto the stack for the new position.
+        
+            
+    return rootNode
 
 
 CODE = '''
