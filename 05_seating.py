@@ -12,29 +12,42 @@ def seating_arrangements(sd: List[int], td: int) -> int:
         for i, seat in enumerate(arrangement): #gives us the seat value and index
             if seat == 1:  #If the seat is taken
                 occupied_seats.append(i)
-        #print(occupied_seats)
+        #print(str(occupied_seats) + " : " + str(arrangement))
         
         if len(occupied_seats) <= 1: #No need to check saids it is a valid seating
             valid_count += 1
-            print(arrangement)
+            print(str(arrangement) + " valid 1st case")
         
         elif len(occupied_seats) > 1:
+            space_between = 0
+            valid = True
             # Calculate the sum of spaces between the first and next occupied seat found
-            for j in range(1, len(occupied_seats)):
+            for j in range(0, len(occupied_seats)):
                 # Calculate the space between consecutive occupied seats
-                start = occupied_seats[j-1]
-                end = occupied_seats[j]
-                space_between = 0
+                start = occupied_seats[j]
+                if(j < len(occupied_seats)-1):
+                    end = occupied_seats[j+1]
+                else: end = occupied_seats[j]
+                print(str(start) + " " + str(end) + " " + str(sum(sd[start:end])) + " check " + str(arrangement))
+                space_between = sum(sd[start:end])
+                if(space_between < td and start is not end):
+                    print("ran")
+                    valid = False
+                    break
+                    
             
             # Check if the seating arrangement is valid
-            if space_between >= td:
+            if valid:
                 valid_count += 1
-                print(arrangement)
+                print(str(arrangement) + " valid 2nd case")
     
 
 
-    print(valid_count)    
+    print(str(valid_count) + "--------------------------------")    
     return valid_count
+    
+
+
 
 #
 # TESTS
@@ -55,11 +68,13 @@ assert exp == ans, f"Incorrect answer for sd = {sd}, td = {td}"
 sd = [2, 3, 2]
 td = 6
 ans = seating_arrangements(sd, td)
-exp = 0
+exp = 6 #how can this test case be 0 if we count seatings that are in this form 0001 0010 0100 1000
 assert exp == ans, f"Incorrect answer for sd = {sd}, td = {td}"
 
 sd = [9, 9, 9, 9]
 td = 2
 ans = seating_arrangements(sd, td)
-exp = 16
+exp = 16 #If we have 5 seats with 9 units of space in between each seat and we must have each person
+#seating no less than 2 units apart doesn't that mean every set is valid? 
+#since every possible combo will have more than 2 units apart.
 assert exp == ans, f"Incorrect answer for sd = {sd}, td = {td}"
