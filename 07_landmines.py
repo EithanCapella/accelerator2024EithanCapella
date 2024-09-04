@@ -26,10 +26,31 @@ would be represented as:
 """
 
 def minefield_paths(A, m, n):
-    #
-    # YOUR CODE GOES HERE
-    #
+    def dfs(x, y, path):
+        
+        if (x == m - 1) and (y == n - 1): #Position is Bottom-Right hence we reached the end
+            result.append(path + [(x, y)])
+            #print(str(result) + " Final Path")
+            return
+        
+        #Check if we haven't reached a corner and the next position is a path
+        if y + 1 < n and A[x][y + 1] == 0: #Move Right
+            #print(str(path) + " Moved Right")
+            dfs(x, y + 1, path + [(x, y)])
+        
+        
+        if x + 1 < m and A[x + 1][y] == 0: #Move Down
+            #print(str(path) + " Moved Down")
+            dfs(x + 1, y, path + [(x, y)])
 
+    
+    result = []
+    if A[0][0] == 0:  #Start from position 0,0 if this position is a path
+        dfs(0, 0, [])
+    
+    print (str(result) + " Collection")
+    print("---------------------")
+    return result
 
 
 # Examples
