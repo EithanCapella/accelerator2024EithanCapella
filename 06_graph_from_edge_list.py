@@ -41,19 +41,40 @@ A --- B
 """
 
 class Node:
-    """
+    def __init__(self, name):
+        self.name = name
+        self.neighbors = []
 
-    YOUR CODE GOES HERE
+    def __str__(self):
+        return f"Node(\"{self.name}\")"
 
-    """
+    def __repr__(self):
+        return f"Node(\"{self.name}\")"
+
 
 def graph_from_node_list(nodes):
     """ Create a graph from a node list """
-    result = None
-    #
-    # YOUR CODE GOES HERE
-    #
-    return result
+    nodesList = {} #If we used a normal list we would have to do a more extensive check to see if the node is there.
+
+    for node in nodes: #We receive a tuple like: ("A", "B")
+        name1, name2 = node #Divide up the tuple
+
+        
+        if name1 not in nodesList: #Create a node if it doesn't exist yet
+            nodesList[name1] = Node(name1)
+        if name2 not in nodesList:
+            nodesList[name2] = Node(name2)
+
+        #Add the neighbors into the appropiate node These are done in pairs.
+        nodesList[name1].neighbors.append(nodesList[name2])#A gets the B neighbor
+        nodesList[name2].neighbors.append(nodesList[name1])#B gets the A neighbor and so on.
+
+    
+    print("Node list: " + str(list(nodesList.values())))
+    for node in nodesList.values():
+        print("Neighbors of " + str(node) + ": " + str(node.neighbors))
+        
+    return list(nodesList.values())
 
 
 def check_node_names(expected_names, nodes):
