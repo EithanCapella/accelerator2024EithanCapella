@@ -1,57 +1,3 @@
-"""
-
-In this exercise you will need to write a function that accepts the root node of
-a tree and a list of strings as input. Each node of the tree will have a numeric
-index and a name. The strings will be words of the same length, and each node
-name will be half the length of the words. The function should return a list of
-all pairs of nodes in the tree whose names can be concatenated to form one of
-the words in the list.
-
-Example:
-
-Tree:
-
-1, twe
- |
- + 2, ign
- |  |
- |  + 3, ord
- |  |  |
- |  |  + 4, exp
- |  |  |
- |  |  + 5, sim
- |  |
- |  + 6, let
- |     |
- |     + 7, ign
- |
- + 8, ort
-    |
-    + 9, exp
-    |  |
-    |  + 10, des
-    |  |
-    |  + 11, aff
-    |
-    + 12, ect
-    |
-    + 13, ord
-
-List of words: ["affect", "afford", "desert", "design", "expect", "expert"]
-
-Output:
-[
-    (Node(11, "aff"), Node(12, "ect")), 
-    (Node(11, "aff"), Node(3, "ord")), 
-    (Node(11, "aff"), Node(13, "ord")), 
-    (Node(10, "des"), Node(2, "ign")), 
-    (Node(10, "des"), Node(7, "ign")), 
-    (Node(4, "exp"), Node(12, "ect")), 
-    (Node(9, "exp"), Node(12, "ect"))
-]
-
-"""
-
 class Node:
     def __init__(self, index, name):
         self.index = index
@@ -65,7 +11,7 @@ class Node:
         return f'Node({self.index}, "{self.name}")'
         
     def __hash__(self):
-        return hash(self.index, self.__delattr__
+        return hash(self.index)
         
     def __eq__(self, other):
         if not isinstance(other, Node):
@@ -73,55 +19,64 @@ class Node:
         return self.index == other.index and self.name == other.name
 
 
-#
+def dfs(root):
+    """Perform a depth-first search (DFS) on the tree."""
+    yield root
+    for child in root.children:
+        yield from dfs(child)
+
+def dfsNonGenerator(root, array):
+    array.append(root)
+    
+    for child in root.children:
+        dfsNonGenerator(child, array)
+    
+    return array
+    
+    
+
 # for node1 in dfs(root):
 #     for node2 in dfs(root):
 #         if node1 != node2:
 #            YOUR CODE GOES HERE
 #             if node1.name + node2.name in target:
                     #list.append(node1, node2)
-#
-        
-#
-#   NodeHash ex. ord: [Node(3, "ord"), Node(13, "ord")]
-#       for val in targets:
-#       h1 = val[:len(val)/2]
-#       h2 = val[len(val)/2:len(val)]
-#       if h1 in NodeHash and h2 in NodeHash:
-#           for side1 in NodeHash[h1]:
-#               for side2 in NodeHash[h2]:
-                    #result.append(side1,side2)
-            
 
-
+def find_word_pairsGenerator(root, targets):
+    
+    result = []
+    
+    #print(list(dfs(root)))
+    
+    for node1 in dfs(root):
+        for node2 in dfs(root):
+            if node1 != node2:
+                if node1.name + node2.name in targets:
+                    result.append(str(node1) + "," + str(node2))
+    
+    print(result)
+    return result
+    
 def find_word_pairs(root, targets):
-    #
-    # YOUR CODE GOES HERE
-    #
-    for word in targets:
-        leftHalf = word[:len(word)/2]
     
-    nodeA = root
-    nodeB = None
+    result = []
     
-    # ord: [Node(3, "ord"), Node(13, "ord")]
+    #print(list(dfs(root)))
+    array = dfsNonGenerator(root , [])
     
-    #Find the
+    #print(array)
     
-    #
+    for node1 in array:
+        for node2 in array:
+            if node1 != node2:
+                if node1.name + node2.name in targets:
+                    result.append(str(node1) + "," + str(node2))
     
-    #aff : ect
-    #aff : ord
-    
+    print(result)
+    return result
 
-    #aff, des, exp
-    #ect, ord, ert, ign
-    
-    #aff
-    
-    #affert not in target
-    
-## Examples
+
+# Test the implementation
 targets = ['affect', 'afford', 'desert', 'design', 'expect', 'expert']
 
 A = Node(1, "twe")
@@ -138,16 +93,27 @@ K = Node(11, "aff")
 L = Node(12, "ect")
 M = Node(13, "ord")
 
-A.children = [B, C]
-B.children = [D, E]
-C.children = [F, G, H]
-D.children = [I, J]
-E.children = [K]
-F.children = [L, M]
+A.children = [B, H]
+B.children = [C, G]
+C.children = [D, E]
+H.children = [I, J]
+D.children = [F]
+I.children = [K, L]
+J.children = [M]
 
 ans = find_word_pairs(A, targets)
 
-assert(set(ans) == {(Node(11, "aff"), Node(12, "ect")), (Node(11, "aff"), Node(3, "ord")), (Node(11, "aff"), Node(13, "ord")), (Node(10, "des"), Node(2, "ign")), (Node(10, "des"), Node(7, "ign")), (Node(4, "exp"), Node(12, "ect")), (Node(9, "exp"), Node(12, "ect"))}
+# Expected output: a set of node pairs
+expected_output = {
+    (Node(11, "aff"), Node(12, "ect")), 
+    (Node(11, "aff"), Node(3, "ord")), 
+    (Node(11, "aff"), Node(13, "ord")), 
+    (Node(10, "des"), Node(2, "ign")), 
+    (Node(10, "des"), Node(7, "ign")), 
+    (Node(4, "exp"), Node(12, "ect")), 
+    (Node(9, "exp"), Node(12, "ect"))
+}
 
+assert set(ans) == expected_output, "Test failed"
 
-        
+print("Test passed")
